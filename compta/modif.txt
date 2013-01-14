@@ -1,0 +1,65 @@
+- creation des sous-fichier
+- modifiquation des dependences de fichier (.asd)
+- corection des dependances de classe
+- exo 1, factorisation de fonction
+- exo 3 = exo 1
+- etude de with-output-presentation
+- exo 4, main la fonction n'arriver pas a supprimer toutes les transaction.
+- exo 5, elle permet aussi de modifer les compte des transaction
+- exo 4, refonte de l'exo 4, il marche sur plus d'entrées, mais toujours pas sur toutes...
+- account et amount de la classe entry sont passer de reader a accessor
+- date de transaction passe de reader a accessor
+- exo faciles : fini
+- modification de display-oneline-transaction-summary pour qu'elle coresponde mieu a l'affichage voulu
+- supp de com-name-change
+- actualisation des exo 4, 5 et 6
+- correction de la fonction format-amount
+- uniformisation des noms
+- add-transaction-entry ne peut plus ajouter de transaction donc le compte est deja utiliser pas l'un des entrées
+- l'ouverture d'un fichier non existant ne fait plus planter le logiciel
+- corection du bug d'ajout d'un entree de transaction
+- debut de l'exo 1 du niveau moyen
+- ajout de la fonction display-inter qui fonction comme format mais dans le pane inter (ça evite de toujour avoir a recuper le pane)
+- factorisation des fonction read-organization et read-organization-default
+- une erreur de version ne fait plus planter le logiciel
+- ajout de la version ComptaV1.1
+- factorisation de la fonction format-amount
+- ajout de racourci pour creer un compte et une transaction
+- creation des groupes
+- modification du nom des groupe
+- on ne peut plus avoir deux nom dans un meme groupe
+- exo 1 (moyen) fini
+- fin de l'exo 3 moyen
+- exo 10moyen fini
+- ajout des creneau pour la gestion des periodes
+- utilisation du clic droit sur les 'textes' cliquables
+- le remplacement d'un nom de transaction par le même n'entraine plus de messages d'erreurs
+- toutes le modif de transaction passent en clic droit (mais je ne sais pas comment faire pour choisir l'option par defaut)
+- ajout des valeur par defaut pour la modification des dates
+- mise a jour de l'exo 6 facil, bouclé pour le bon, j'espert...
+- debut de l'affichage des dates
+- le remplacement d'un nom de groupe ou de compte par le même n'entraine plus de messages d'erreurs
+- debut de la view pour les groupes
+- ecaltement du fichier gui.lisp
+- la validiter d'un compta s'actualise corectement a la suppretion d'une entrée
+- un group devien veritablement un account (par heritage)
+- ajout du menu pour les fonction difficile d'acces a la souris
+- le fichier de configuration gere maintenant plusieurs type (integer string...)
+- la createur d'une transaction est personalisable via le parametre user dans le fichier de configuration
+- bien qu'un group soit un account, ils ne peuvent plus etre la cible d'entry
+- ajout d'une confirmation pour la suppretion d'une transaction
+- l'indiquation de validité n'aparais plus ailleur que dans le la liste des transactions
+- actualisation de creat-organization
+- ajout de la fonction delete-organization (mais pour l'instant il faut toujour laisser au moins une organization ouverte)
+- ajout de la fonction edit-organization-name
+- ajout de la confirmation pour la suppretion d'un compte et d'un organization
+- la supretion du fichier de configue de faire plus planter le logiciel
+- suppretion du fichier gui-group devenu inutile depuis de les groupe sont une sous classe des account
+- edition de la fonction de changement de date pour pouvoir la reutiliser avant les periodes
+- ajout de la confirmation avant de quitter (que via le menu)
+       Note : faudrai regarder via un befor
+- update de la fonction sum-values-account pour que la periode soit prise en compte
+- fin de l'exo 2 moyen, le resultat est assez sympa :)
+- retablissement de la fonction sum-values-account, je prefer trier la lister avant pour plus de lisibilite (legere perte de performance selon moi)
+- exo 9 (moyen) fait uniquement pour le package compta-model
+- amelioration du joli calendrier

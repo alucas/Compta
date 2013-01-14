@@ -1,0 +1,91 @@
+ComptaV1.1
+
+[COMPTA-MODEL:ORGANIZATION
+   :NAME "Home version 1.1"
+   :ACCOUNTS ([COMPTA-MODEL:GROUP
+                 :NAME "Fournisseurs"
+                 :ACCOUNTS COMMON-LISP:NIL ]
+              [COMPTA-MODEL:GROUP
+                 :NAME "Coûts"
+                 :ACCOUNTS (#1=[COMPTA-MODEL:ACCOUNT-R :NAME "Nourriture" ]
+                            #2=[COMPTA-MODEL:ACCOUNT-R :NAME "Electricité" ]
+                            #3=[COMPTA-MODEL:ACCOUNT-R
+                                  :NAME "Télécommunication" ]) ]
+              [COMPTA-MODEL:GROUP
+                 :NAME "Revenus"
+                 :ACCOUNTS ([COMPTA-MODEL:ACCOUNT-R :NAME "Salaire" ]) ]
+              [COMPTA-MODEL:GROUP
+                 :NAME "Actifs"
+                 :ACCOUNTS ([COMPTA-MODEL:ACCOUNT-R
+                               :NAME "Stock de marchandise" ]
+                            #4=[COMPTA-MODEL:ACCOUNT-R
+                                  :NAME "Comptes bancaires" ]
+                            [COMPTA-MODEL:ACCOUNT-R :NAME "Créances" ]) ]
+              [COMPTA-MODEL:GROUP
+                 :NAME "Passifs"
+                 :ACCOUNTS ([COMPTA-MODEL:ACCOUNT-R :NAME "Dettes" ]) ])
+   :TRANSACTIONS ([COMPTA-MODEL:TRANSACTION
+                     :NAME "abonement"
+                     :DATE [COMPTA-MODEL:DATE
+                              :YEAR 2010
+                              :MONTH 3
+                              :DAY 25
+                              :HOUR 22
+                              :MINUTE 8 ]
+                     :CREATOR "Antoine"
+                     :DEBITS COMMON-LISP:NIL
+                     :CREDITS ([COMPTA-MODEL:ENTRY :ACCOUNT #2# :AMOUNT 500 ]
+                               [COMPTA-MODEL:ENTRY
+                                  :ACCOUNT #3#
+                                  :AMOUNT 2990 ]) ]
+                  [COMPTA-MODEL:TRANSACTION
+                     :NAME "impot"
+                     :DATE [COMPTA-MODEL:DATE
+                              :YEAR 2010
+                              :MONTH 3
+                              :DAY 23
+                              :HOUR 21
+                              :MINUTE 12 ]
+                     :CREATOR #5="Spiaggia"
+                     :DEBITS ([COMPTA-MODEL:ENTRY :ACCOUNT #4# :AMOUNT 700 ])
+                     :CREDITS ([COMPTA-MODEL:ENTRY
+                                  :ACCOUNT #2#
+                                  :AMOUNT 700 ]) ]
+                  [COMPTA-MODEL:TRANSACTION
+                     :NAME "salaire"
+                     :DATE [COMPTA-MODEL:DATE
+                              :YEAR 2010
+                              :MONTH 3
+                              :DAY 23
+                              :HOUR 21
+                              :MINUTE 11 ]
+                     :CREATOR #5#
+                     :DEBITS COMMON-LISP:NIL
+                     :CREDITS COMMON-LISP:NIL ]
+                  [COMPTA-MODEL:TRANSACTION
+                     :NAME "courses"
+                     :DATE [COMPTA-MODEL:DATE
+                              :YEAR 2010
+                              :MONTH 3
+                              :DAY 22
+                              :HOUR 18
+                              :MINUTE 25 ]
+                     :CREATOR "Spiaggia"
+                     :DEBITS ([COMPTA-MODEL:ENTRY :ACCOUNT #4# :AMOUNT 2300 ])
+                     :CREDITS ([COMPTA-MODEL:ENTRY
+                                  :ACCOUNT #1#
+                                  :AMOUNT 2300 ]) ])
+   :PERIOD [COMPTA-MODEL:PERIOD
+              :END [COMPTA-MODEL:DATE
+                      :YEAR 2010
+                      :MONTH 3
+                      :DAY 24
+                      :HOUR 0
+                      :MINUTE 0 ]
+              :START [COMPTA-MODEL:DATE
+                        :YEAR 2010
+                        :MONTH 3
+                        :DAY 23
+                        :HOUR 0
+                        :MINUTE 0 ]
+              :ENABLE COMMON-LISP:NIL ] ]

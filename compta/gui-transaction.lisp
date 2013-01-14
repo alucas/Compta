@@ -1,0 +1,123 @@
+(in-package :compta-gui)
+
+(defun display-oneline-transaction-summary (pane format-val transaction)
+  (with-output-as-presentation (pane transaction 'transaction)
+    (format pane format-val (iso-date-string (date transaction)) (name transaction))))
+; exo 3
+(defun display-transaction-infos (pane transaction)
+  (let ((format-val "[~10d.~2,'0d]~%")
+	(sum-debits  (sum-values-transaction transaction #'debits))
+	(sum-credits (sum-values-transaction transaction #'credits)))
+    (format pane "Somme des débits :~%~10t")
+    (format-amount pane sum-debits format-val)
+    (format pane "Somme des crédits :~%~10t")
+    (format-amount pane sum-credits format-val)
+    (format pane "Différence :~%~10t")
+    (format-amount pane (- sum-credits sum-debits) format-val)))
+
+(defmethod display-main-with-view (frame pane (view transaction-view))
+  (declare (ignore frame))
+  (let ((transaction (transaction view)))
+      ; display transation name
+      (display-oneline-transaction-summary pane "~a ~a~%" transaction)    
+      (format pane "Created by: ~a~%~%~%" (creator transaction))
+      (flet ((fadd (entry)
+	       (push entry (debits  transaction))))
+	(display-entry-adder pane "Debits"
+			     (lambda (entry) (fadd entry))
+			     (debits  transaction)))
+      (flet ((fadd (entry)
+	       (push entry (credits transaction))))
+	(display-entry-adder pane "Credits"
+			     (lambda (entry) (fadd entry))
+			     (credits transaction)))
+      
+      (format pane "~%")
+    
+      ;display transaction infos, exo 3
+      (display-transaction-infos pane transaction)))
+
+(defun display-period(pane period)
+  (with-output-as-presentation (pane period 'period)
+    (format pane "Period :~%"))
+  (format pane "  ")
+  
+  (if (enable period)
+      (with-output-as-presentation (pane (start period) 'date)
+	(format pane "~a" (iso-date-string (start period))))
+      (format pane "disable"))
+  
+  (format pane " (start)~%  ")
+  
+  (if (enable period)
+      (with-output-as-presentation (pane (end period) 'date)
+	(format pane "~a"  (iso-date-string (end period))))
+      (format pane "disable"))
+  
+  (format pane " (end)~%~%"))
+
+(defun display-transactions (frame pane)
+  (let* ((org (current-organization frame))
+	 (period (period org))
+	 (s (encode-time (start period)))
+	 (e (encode-time (end   period))))
+    (display-period pane period)
+    (format pane "Transactions :~%")
+    (loop 
+       for tr in (reverse (transactions org))
+       do (when (or (not (enable period))
+		    (date-in-period s e (date tr)))
+	    (display-oneline-transaction-summary pane "  ~a ~a" tr)
+	    (format pane (if (valid tr) "~%" " [Invalid]~%"))))))
+
+(define-compta-command (com-show-hide-period :name t)
+    ((period 'period :gesture :select))
+  (setf (enable period) (not (enable period))))
+
+(define-compta-command (com-edit-transaction :name t)
+    ((transaction 'transaction :gesture :select))
+  (setf (stream-default-view (find-pane-named *application-frame* 'main))
+        (make-instance 'transaction-view :transaction transaction)))
+
+(define-compta-command (com-add-transaction :name t :menu "Add-transaction") ()
+  (let ((name (accept 'string :prompt "Nom ")))
+    (if (not (equal name ""))
+	(if (not (member name (transactions (current-organization *application-frame*)) :test #'equal :key #'name))
+	    (let ((transaction (make-instance 'transaction :name name :valid t :creator (gethash "user" *var*))))
+	      (push transaction (transactions (current-organization *application-frame*)))
+	      (setf (stream-default-view (find-pane-named *application-frame* 'main))
+		    (make-instance 'transaction-view :transaction transaction)))
+	    (display-inter "Nom '~a' déjà utilisé" name))
+	(display-inter "Il faut entrer un nom"))))
+
+(define-compta-command (com-delete-transaction :name t)
+    ((tr 'transaction :gesture :nothing))
+  (let ((organization (current-organization *application-frame*))
+	(pane-in (find-pane-named *application-frame* 'inter)))
+    (format pane-in "Voulez-vous vraiment supprimer la transaction ")
+    (display-oneline-transaction-summary pane-in "~a ~a~%" tr)
+    (when (confirm)
+      (setf (transactions organization)
+	    (remove tr (transactions organization))))))
+
+(define-compta-command (com-edit-transaction-name :name t)
+    ((tr 'transaction :gesture :nothing))
+  (let ((name (accept 'string :prompt "Nom " :default (name tr) :insert-default t)))
+    (when (not (equal name (name tr)))
+	(if (not (equal name ""))
+	    (if (not (member name (transactions (current-organization *application-frame*)) :test #'equal :key #'name))
+		(setf (name tr) name)
+		(display-inter "Nom '~a' déjà utilisé" name))
+	    (display-inter "Il faut entrer un nom")))))
+
+;exo 2 (facile)
+(defun sort-transaction-dates ()
+  (setf (transactions (current-organization *application-frame*))
+	(stable-sort (transactions (current-organization *application-frame*))
+		     (lambda (x1 x2) (not (date-lessp (date x1) (date x2)))))))
+
+;exo 2 (facile)
+(define-compta-command (com-edit-transaction-date :name t)
+    ((tr 'transaction :gesture :nothing))
+  (edit-date (date tr))
+  (sort-transaction-dates))

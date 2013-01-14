@@ -1,0 +1,20 @@
+(require :compta)
+
+(in-package :compta-gui); C-c M-p
+(compta-gui:compta)
+(compta)
+
+
+
+Travailler sans l'interface graphique:
+Dans package compta-modele
+(defparameter *organization*
+    (io:read-model "home" compta-io:*compta-allowed-version-names*))
+
+(defparameter *un-compte* (account (car (debits (car (transactions *organization*))))))
+
+(defparameter *une-transaction* (transactions *organization*))
+
+(debits (car (transactions *organization*)))
+
+with-output-as-presentation (stream object type &key modifier single-box allow-sensitive-inferiors record-type) &body body [Macro]
